@@ -109,4 +109,4 @@ MIT License © 2025
 
 ---
 
-Made with 💖 by Habibees
+Made with 💖 by Habibees 🐝
