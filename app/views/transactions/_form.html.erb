@@ -1,0 +1,55 @@
+<%= form_with(model: transaction, local: true, class: "bg-gray-800 rounded-lg p-6") do |form| %>
+  <% if transaction.errors.any? %>
+    <div class="bg-red-500 text-white p-4 rounded-md mb-6">
+      <h2 class="text-lg font-medium mb-2"><%= pluralize(transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
+      <ul class="list-disc pl-5">
+        <% transaction.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <%= form.label :amount, class: "block text-gray-300 text-sm font-medium mb-2" %>
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">$</span>
+        <%= form.text_field :amount, class: "bg-gray-700 text-white rounded px-3 py-2 pl-8 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500", placeholder: "0.00" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :date, class: "block text-gray-300 text-sm font-medium mb-2" %>
+      <%= form.date_field :date, class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" %>
+    </div>
+
+    <div>
+      <%= form.label :category, class: "block text-gray-300 text-sm font-medium mb-2" %>
+      <%= form.select :category, [
+        ["Housing", "housing"],
+        ["Food", "food"],
+        ["Transportation", "transportation"],
+        ["Entertainment", "entertainment"],
+        ["Utilities", "utilities"],
+        ["Income", "income"],
+        ["Other", "other"]
+      ], {}, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
+    </div>
+
+    <div>
+      <%= form.label :transaction_type, class: "block text-gray-300 text-sm font-medium mb-2" %>
+      <%= form.select :transaction_type, [["Expense", "expense"], ["Income", "income"]], {}, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
+    </div>
+
+    <div class="md:col-span-2">
+      <%= form.label :description, class: "block text-gray-300 text-sm font-medium mb-2" %>
+      <%= form.text_area :description, rows: 3, class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500", placeholder: "Enter transaction details..." %>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end">
+    <%= link_to "Cancel", transactions_path, class: "mr-4 text-gray-300 hover:text-white" %>
+    <%= form.submit class: "bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 rounded-md font-medium" %>
+  </div>
+<% end %> 

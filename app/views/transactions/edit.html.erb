@@ -1,0 +1,20 @@
+<div class="bg-gray-900 text-white min-h-screen">
+  <!-- Header Section -->
+  <section class="py-8 bg-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold mb-2">Edit Transaction</h1>
+          <p class="text-gray-300">Update transaction details</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="py-6">
+    <div class="container mx-auto px-4">
+      <%= render 'form', transaction: @transaction %>
+    </div>
+  </section>
+</div> 
