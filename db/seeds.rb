@@ -13,49 +13,49 @@ transactions = [
   {
     amount: 1200.00,
     date: 1.month.ago,
-    category: 'housing',
+    category: 'hostel',
     description: 'Monthly Rent',
     transaction_type: 'expense'
   },
   {
     amount: 3500.00,
     date: 2.weeks.ago,
-    category: 'income',
-    description: 'Salary Deposit',
+    category: 'Stationary',
+    description: 'Books, pens, etc',
     transaction_type: 'income'
   },
   {
     amount: 125.75,
     date: 1.week.ago,
-    category: 'food',
+    category: 'Khana Peena',
     description: 'Grocery Shopping',
     transaction_type: 'expense'
   },
   {
     amount: 45.50,
     date: 5.days.ago,
-    category: 'transportation',
+    category: 'transport',
     description: 'Gas/Fuel',
     transaction_type: 'expense'
   },
   {
     amount: 85.20,
     date: 3.days.ago,
-    category: 'utilities',
+    category: 'electricity',
     description: 'Electricity Bill',
     transaction_type: 'expense'
   },
   {
     amount: 78.50,
     date: 2.days.ago,
-    category: 'entertainment',
-    description: 'Restaurant Dinner',
+    category: 'Dost',
+    description: 'Turna phirna',
     transaction_type: 'expense'
   },
   {
     amount: 14.99,
     date: 1.day.ago,
-    category: 'entertainment',
+    category: 'movie',
     description: 'Movie Tickets',
     transaction_type: 'expense'
   }
