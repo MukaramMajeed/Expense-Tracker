@@ -1,0 +1,2 @@
+class JavascriptFixesController < ApplicationController
+end

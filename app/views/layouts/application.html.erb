@@ -19,12 +19,16 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    
+    <!-- Include JavaScript files -->
+    <script src="/delete-handler.js"></script>
+    <script src="/notifications.js"></script>
   </head>
 
   <body>
     <%= render "shared/header" %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p> 
+    <p class="notice hidden"><%= notice %></p>
+    <p class="alert hidden"><%= alert %></p> 
     <main class="">
       <%= yield %>
     </main>

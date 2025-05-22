@@ -52,8 +52,8 @@
               <label class="block text-gray-300 text-sm mb-2">Type</label>
               <%= form.select :transaction_type, [
                 ["All Types", ""],
-                ["Expense", "expense"],
-                ["Income", "income"]
+                ["Spending", "expense"],
+                ["Receiving", "income"]
               ], { selected: params[:transaction_type] }, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
             </div>
             <div class="flex items-end">
@@ -103,7 +103,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= transaction.description %></td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                       <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= transaction.transaction_type == 'income' ? 'bg-green-500' : 'bg-pink-500' %> text-white">
-                        <%= transaction.transaction_type.capitalize %>
+                        <%= transaction.transaction_type == 'income' ? 'Receiving' : 'Spending' %>
                       </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm <%= transaction.transaction_type == 'income' ? 'text-green-400' : 'text-pink-400' %> text-right font-medium">
@@ -111,7 +111,9 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <%= link_to "Edit", edit_transaction_path(transaction), class: "text-teal-500 hover:text-teal-400 mr-3" %>
-                      <%= link_to "Delete", transaction_path(transaction), method: :delete, data: { confirm: "Are you sure you want to delete this transaction?" }, class: "text-red-500 hover:text-red-400" %>
+                      <%= form_with(url: transaction_path(transaction), method: :delete, class: "inline delete-form") do %>
+                        <button type="submit" class="text-red-500 hover:text-red-400 bg-transparent border-0 cursor-pointer p-0 delete-btn" data-confirm="Are you sure you want to delete this transaction?">Delete</button>
+                      <% end %>
                     </td>
                   </tr>
                 <% end %>

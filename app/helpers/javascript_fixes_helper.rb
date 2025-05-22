@@ -1,0 +1,2 @@
+module JavascriptFixesHelper
+end

@@ -29,9 +29,9 @@
       <%= form.select :category, [
         ["Hostel", "hostel"],
         ["Khana Peena", "khana peena"],
-        ["Transport", "transport"],       
-        ["Bills", "electricity"],
-        ["Fees", "fees"],
+        ["Transportation", "transport"],
+        ["Entertainment", "movie"],
+        ["Electricity", "electricity"],
         ["Income", "income"],
         ["Other", "other"]
       ], {}, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
@@ -39,7 +39,7 @@
 
     <div>
       <%= form.label :transaction_type, class: "block text-gray-300 text-sm font-medium mb-2" %>
-      <%= form.select :transaction_type, [["Expense", "expense"], ["Income", "income"]], {}, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
+      <%= form.select :transaction_type, [["Spending", "expense"], ["Receiving", "income"]], {}, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
     </div>
 
     <div class="md:col-span-2">
