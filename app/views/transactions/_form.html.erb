@@ -20,8 +20,9 @@
     </div>
 
     <div>
-      <%= form.label :date, class: "block text-gray-300 text-sm font-medium mb-2" %>
+      <%= form.label :date, "Date (defaults to today)", class: "block text-gray-300 text-sm font-medium mb-2" %>
       <%= form.date_field :date, class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" %>
+      <p class="mt-1 text-xs text-gray-400">Current date is pre-selected. Change only if needed.</p>
     </div>
 
     <div>

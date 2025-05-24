@@ -33,6 +33,7 @@ class TransactionsController < ApplicationController
 
   def new
     @transaction = Transaction.new
+    @transaction.date = Date.today
   end
 
   def create
