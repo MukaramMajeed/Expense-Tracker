@@ -4,4 +4,12 @@ class ApplicationController < ActionController::Base
   
   # Make current_user accessible in views
   helper_method :current_user
+
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:account_update, keys: [:currency_preference])
+  end
 end

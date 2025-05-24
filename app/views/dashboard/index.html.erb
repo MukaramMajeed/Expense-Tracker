@@ -35,7 +35,7 @@
           </div>
           <div class="ml-4">
             <p class="text-sm font-medium text-gray-400">Total Spent</p>
-            <p class="text-2xl font-bold text-white">$<%= number_with_precision(@total_spent, precision: 2, delimiter: ',') || '0.00' %></p>
+            <p class="text-2xl font-bold text-white"><%= current_user.currency_symbol %><%= number_with_precision(@total_spent || 0, precision: 2, delimiter: ',') %></p>
             <p class="text-xs text-emerald-400 flex items-center mt-1">
               <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -56,7 +56,7 @@
           </div>
           <div class="ml-4">
             <p class="text-sm font-medium text-gray-400">Receiving</p>
-            <p class="text-2xl font-bold text-white">$<%= number_with_precision(@total_income, precision: 2, delimiter: ',') || '0.00' %></p>
+            <p class="text-2xl font-bold text-white"><%= current_user.currency_symbol %><%= number_with_precision(@total_income || 0, precision: 2, delimiter: ',') %></p>
             <p class="text-xs text-blue-400 flex items-center mt-1">
               <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -77,7 +77,7 @@
           </div>
           <div class="ml-4">
             <p class="text-sm font-medium text-gray-400">Balance</p>
-            <p class="text-2xl font-bold text-white">$<%= number_with_precision(@balance, precision: 2, delimiter: ',') || '0.00' %></p>
+            <p class="text-2xl font-bold text-white"><%= current_user.currency_symbol %><%= number_with_precision(@balance || 0, precision: 2, delimiter: ',') %></p>
             <p class="text-xs text-purple-400 flex items-center mt-1">
               <% if @balance && @balance > 0 %>
                 <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -88,7 +88,7 @@
                 <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                 </svg>
-                <span>Negative balance</span>
+                <span>Waiting for transactions</span>
               <% end %>
             </p>
           </div>
@@ -203,7 +203,7 @@
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400"><%= transaction.date.strftime("%b %d, %Y") %></td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium <%= transaction.transaction_type == 'income' ? 'text-emerald-400' : 'text-red-400' %>">
-                        <%= transaction.transaction_type == 'income' ? '+' : '-' %>$<%= number_with_precision(transaction.amount, precision: 2, delimiter: ',') %>
+                        <%= transaction.transaction_type == 'income' ? '+' : '-' %><%= current_user.currency_symbol %><%= number_with_precision(transaction.amount, precision: 2, delimiter: ',') %>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <div class="flex space-x-3">
@@ -245,7 +245,7 @@
             <p class="text-sm text-gray-400">This month</p>
           </div>
           <div class="p-6">
-            <% if @category_percentages.present? %>
+            <% if @category_percentages.present? && @category_percentages.any? %>
               <% @category_percentages.each do |category, percentage| %>
                 <% 
                   category_color = case category
@@ -273,7 +273,7 @@
               <% end %>
             <% else %>
               <div class="text-center text-gray-400 py-8">
-                No spending data available yet.
+                No spending data available yet. Add transactions to see your spending breakdown.
               </div>
             <% end %>
             

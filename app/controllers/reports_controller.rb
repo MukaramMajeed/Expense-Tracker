@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
     @report_type = params[:report_type] || 'monthly'
     
     # Fetch transactions based on filters
-    @transactions = Transaction.where(date: @start_date..@end_date)
+    @transactions = current_user.transactions.where(date: @start_date..@end_date)
     @transactions = @transactions.where(category: @category) if @category.present?
     @transactions = @transactions.where(transaction_type: @transaction_type) if @transaction_type.present?
     
@@ -109,7 +109,7 @@ class ReportsController < ApplicationController
     @category = params[:category]
     @transaction_type = params[:transaction_type]
     
-    @transactions = Transaction.where(date: @start_date..@end_date)
+    @transactions = current_user.transactions.where(date: @start_date..@end_date)
     @transactions = @transactions.where(category: @category) if @category.present?
     @transactions = @transactions.where(transaction_type: @transaction_type) if @transaction_type.present?
     
@@ -131,7 +131,7 @@ class ReportsController < ApplicationController
     @category = params[:category]
     @transaction_type = params[:transaction_type]
     
-    @transactions = Transaction.where(date: @start_date..@end_date)
+    @transactions = current_user.transactions.where(date: @start_date..@end_date)
     @transactions = @transactions.where(category: @category) if @category.present?
     @transactions = @transactions.where(transaction_type: @transaction_type) if @transaction_type.present?
     
@@ -153,7 +153,7 @@ class ReportsController < ApplicationController
     @category = params[:category]
     @transaction_type = params[:transaction_type]
     
-    @transactions = Transaction.where(date: @start_date..@end_date)
+    @transactions = current_user.transactions.where(date: @start_date..@end_date)
     @transactions = @transactions.where(category: @category) if @category.present?
     @transactions = @transactions.where(transaction_type: @transaction_type) if @transaction_type.present?
     

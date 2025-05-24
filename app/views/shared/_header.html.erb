@@ -17,27 +17,52 @@
         <a href="/dashboard" class="text-gray-300 hover:text-white">Dashboard</a>
         <a href="/transactions" class="text-gray-300 hover:text-white">Transactions</a>
         <a href="/reports" class="text-gray-300 hover:text-white">Reports</a>
-        <a href="/categories" class="text-gray-300 hover:text-white">Categories</a>
       </nav>
       
       <div class="flex items-center space-x-4">
-        <button class="text-gray-300 hover:text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-        </button>
-        
-        <div class="group relative">
-          <div class="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-white font-medium cursor-pointer">
+        <div class="relative" id="profile-dropdown-container">
+          <div class="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-white font-medium cursor-pointer" id="profile-toggle">
             <%= current_user.email[0..1].upcase %>
           </div>
-          <div class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
-            <%= link_to "Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" %>
-            <%= link_to "Sign out", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" %>
+          <div class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-50 hidden" id="profile-dropdown" style="min-width: 200px;">
+            <%= link_to edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+              Profile
+            <% end %>
+            <%= button_to destroy_user_session_path, method: :delete, class: "block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" do %>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V7.414l-5-5H3zm7 4a1 1 0 00-1 1v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 13.586V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                Sign Out
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const profileToggle = document.getElementById('profile-toggle');
+          const profileDropdown = document.getElementById('profile-dropdown');
+          const container = document.getElementById('profile-dropdown-container');
+
+          if (profileToggle && profileDropdown) {
+            profileToggle.addEventListener('click', function() {
+              profileDropdown.classList.toggle('hidden');
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', function(event) {
+              if (!container.contains(event.target)) {
+                profileDropdown.classList.add('hidden');
+              }
+            });
+          }
+        });
+      </script>
     <% else %>
       <!-- Navigation for guests -->
       <div class="flex items-center space-x-4">

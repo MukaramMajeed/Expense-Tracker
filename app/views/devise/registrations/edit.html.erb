@@ -1,59 +1,127 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-900 px-4">
-  <div class="max-w-md w-full space-y-6 bg-gray-800 p-10 rounded-xl shadow-lg">
-    
-    <h2 class="text-center text-3xl font-bold text-white">🛠️ Edit <%= resource_name.to_s.humanize %></h2>
+<div class="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+    <!-- Page Header -->
+    <div class="text-center mb-10">
+      <h1 class="text-3xl font-bold text-white">Profile Settings</h1>
+      <p class="mt-2 text-gray-400">Manage your account preferences and security settings</p>
+    </div>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-8" }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="space-y-4">
-
-        <div class="flex flex-col">
-          <%= f.label :email, class: "text-white mb-1" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" %>
-        </div>
-
-        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-          <div class="text-yellow-300 text-sm">
-            Currently waiting confirmation for: <%= resource.unconfirmed_email %>
+      <!-- Profile Info Card -->
+      <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div class="px-6 py-4 bg-gray-700 border-b border-gray-600 flex items-center">
+          <div class="w-12 h-12 rounded-full bg-teal-500 flex items-center justify-center text-white font-bold text-xl mr-4">
+            <%= current_user.email[0..1].upcase %>
           </div>
-        <% end %>
+          <h2 class="text-xl font-semibold text-white">Account Information</h2>
+        </div>
 
-        <div class="flex flex-col">
-          <%= f.label :password, class: "text-white mb-1" %>
-          <i class="text-sm text-gray-400 mb-1">(leave blank if you don't want to change it)</i>
-          <%= f.password_field :password, autocomplete: "new-password", class: "bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" %>
-          <% if @minimum_password_length %>
-            <em class="text-gray-400 text-sm mt-1"><%= @minimum_password_length %> characters minimum</em>
+        <div class="p-6 space-y-6">
+          <!-- Email Field -->
+          <div>
+            <%= f.label :email, class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= f.email_field :email, autocomplete: "email", class: "w-full bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500" %>
+          </div>
+
+          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+            <div class="bg-yellow-900 border border-yellow-700 text-yellow-300 px-4 py-3 rounded-md">
+              <p class="text-sm">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+            </div>
           <% end %>
+
+          <!-- Currency Preference -->
+          <div>
+            <%= f.label :currency_preference, "Currency Preference", class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= f.select :currency_preference,
+                         User::CURRENCY_OPTIONS.map { |code, symbol| ["#{code} (#{symbol})", code] },
+                         {},
+                         class: "w-full bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500" %>
+            <p class="mt-1 text-sm text-gray-400">Choose your preferred currency for displaying amounts</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Change Card -->
+      <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div class="px-6 py-4 bg-gray-700 border-b border-gray-600">
+          <h2 class="text-xl font-semibold text-white">Change Password</h2>
         </div>
 
-        <div class="flex flex-col">
-          <%= f.label :password_confirmation, class: "text-white mb-1" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" %>
-        </div>
+        <div class="p-6 space-y-6">
+          <!-- New Password Field -->
+          <div>
+            <%= f.label :password, "New Password", class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= f.password_field :password, autocomplete: "new-password", class: "w-full bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500" %>
+            <p class="mt-1 text-sm text-gray-400">Leave blank if you don't want to change it</p>
+            <% if @minimum_password_length %>
+              <p class="mt-1 text-sm text-gray-400"><%= @minimum_password_length %> characters minimum</p>
+            <% end %>
+          </div>
 
-        <div class="flex flex-col">
-          <%= f.label :current_password, class: "text-white mb-1" %>
-          <i class="text-sm text-gray-400 mb-1">(we need your current password to confirm your changes)</i>
-          <%= f.password_field :current_password, autocomplete: "current-password", class: "bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" %>
-        </div>
+          <!-- Password Confirmation Field -->
+          <div>
+            <%= f.label :password_confirmation, "Confirm New Password", class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500" %>
+          </div>
 
+          <!-- Current Password Field -->
+          <div>
+            <%= f.label :current_password, class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full bg-gray-700 border border-gray-600 text-white rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500" %>
+            <p class="mt-1 text-sm text-gray-400">We need your current password to confirm changes</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-4">
+        <div class="flex flex-col sm:flex-row gap-4">
+          <%= f.submit "Update Profile", class: "bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 px-6 rounded-md transition duration-150" %>
+          <%= link_to "Back to Dashboard", dashboard_path, class: "bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-md transition duration-150 text-center" %>
+        </div>
+        
         <div>
-          <%= f.submit "✅ Update", class: "w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md transition duration-200" %>
+          <%= button_to "Delete Account", registration_path(resource_name), 
+                        data: { 
+                          confirm: "Are you sure you want to delete your account? This action cannot be undone.", 
+                          turbo_confirm: "Are you sure you want to delete your account? This action cannot be undone." 
+                        }, 
+                        method: :delete, 
+                        class: "bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-md transition duration-150" %>
         </div>
-
       </div>
     <% end %>
-
-    <div class="pt-6 space-y-4 text-center">
-      <h3 class="text-red-400 text-xl font-semibold">💥 Cancel my account</h3>
-      <div>
-        Unhappy? 
-        <%= button_to "❌ Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: "mt-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200" %>
-      </div>
-
-      <%= link_to "⬅️ Back", :back, class: "text-gray-300 hover:text-white underline text-sm" %>
-    </div>
   </div>
 </div>
+
+<!-- Flash Message Toast -->
+<% if notice || alert %>
+  <div class="fixed bottom-4 right-4 max-w-md bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-hidden" id="flash-message">
+    <div class="px-4 py-3 flex justify-between items-center">
+      <p class="text-sm font-medium <%= notice ? 'text-green-400' : 'text-red-400' %>">
+        <%= notice || alert %>
+      </p>
+      <button onclick="document.getElementById('flash-message').style.display='none'" class="text-gray-500 hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Auto-hide flash messages after 5 seconds
+    setTimeout(function() {
+      const flashMessage = document.getElementById('flash-message');
+      if (flashMessage) {
+        flashMessage.style.opacity = '0';
+        flashMessage.style.transition = 'opacity 0.5s ease-in-out';
+        setTimeout(function() {
+          flashMessage.style.display = 'none';
+        }, 500);
+      }
+    }, 5000);
+  </script>
+<% end %>

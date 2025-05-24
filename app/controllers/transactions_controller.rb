@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
 
   def index
-    @transactions = Transaction.all
+    @transactions = current_user.transactions
 
     # Apply date range filter
     if params[:start_date].present?
@@ -32,12 +32,13 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    @transaction = Transaction.new
+    @transaction = current_user.transactions.build
     @transaction.date = Date.today
   end
 
   def create
     @transaction = Transaction.new(transaction_params)
+    @transaction.user = current_user
     
     if @transaction.save
       redirect_to transactions_path, notice: "Transaction was successfully created."
@@ -65,7 +66,7 @@ class TransactionsController < ApplicationController
   private
 
   def set_transaction
-    @transaction = Transaction.find(params[:id])
+    @transaction = current_user.transactions.find(params[:id])
   end
 
   def transaction_params
