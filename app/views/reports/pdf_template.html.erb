@@ -1,0 +1,98 @@
+<div class="header">
+  <div class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38b2ac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="12 6 12 12 16 14"></polyline>
+    </svg>
+    <div>
+      <h1>ExpenseTrack - Financial Report</h1>
+      <div class="date">Generated on <%= Date.today.strftime("%B %d, %Y") %></div>
+    </div>
+  </div>
+  <div class="user-info">
+    <h2><%= current_user.email.split('@').first.capitalize %></h2>
+    <div><%= current_user.email %></div>
+    <div class="date">Account created: <%= current_user.created_at.strftime("%b %d, %Y") %></div>
+  </div>
+</div>
+
+<div class="report-details">
+  <h2>Report Summary</h2>
+  <p><strong>Period:</strong> <%= @start_date.strftime("%b %d, %Y") %> - <%= @end_date.strftime("%b %d, %Y") %></p>
+  <% if @category.present? %>
+    <p><strong>Category:</strong> <%= @category.capitalize %></p>
+  <% end %>
+  <% if @transaction_type.present? %>
+    <p><strong>Type:</strong> <%= @transaction_type.capitalize %></p>
+  <% end %>
+</div>
+
+<div class="summary">
+  <div class="summary-card income">
+    <div class="card-title">TOTAL INCOME</div>
+    <div class="card-value">$<%= number_with_precision(@total_income, precision: 2, delimiter: ',') || '0.00' %></div>
+  </div>
+  
+  <div class="summary-card expenses">
+    <div class="card-title">TOTAL EXPENSES</div>
+    <div class="card-value">$<%= number_with_precision(@total_expenses, precision: 2, delimiter: ',') || '0.00' %></div>
+  </div>
+  
+  <div class="summary-card savings">
+    <div class="card-title">NET SAVINGS</div>
+    <div class="card-value">$<%= number_with_precision(@net_savings, precision: 2, delimiter: ',') || '0.00' %></div>
+  </div>
+</div>
+
+<h2>Transaction Details</h2>
+<table>
+  <thead>
+    <tr>
+      <th>DATE</th>
+      <th>CATEGORY</th>
+      <th>DESCRIPTION</th>
+      <th>AMOUNT</th>
+      <th>TYPE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @transactions.present? %>
+      <% @transactions.each do |transaction| %>
+        <tr>
+          <td><%= transaction.date.strftime("%b %d, %Y") %></td>
+          <td>
+            <% 
+              category_colors = {
+                'hostel' => 'background-color:#d1fae5; color:#047857;',
+                'khana peena' => 'background-color:#dbeafe; color:#1e40af;',
+                'transport' => 'background-color:#e0e7ff; color:#3730a3;',
+                'movie' => 'background-color:#fef3c7; color:#92400e;',
+                'electricity' => 'background-color:#e0e7ff; color:#4f46e5;',
+                'income' => 'background-color:#d1fae5; color:#047857;',
+                'other' => 'background-color:#fee2e2; color:#b91c1c;'
+              }
+              color = category_colors[transaction.category] || 'background-color:#f3f4f6; color:#374151;'
+            %>
+            <span class="category" style="<%= color %>">
+              <%= transaction.category.capitalize %>
+            </span>
+          </td>
+          <td><%= transaction.description %></td>
+          <td class="<%= transaction.transaction_type == 'income' ? 'income-amount' : 'expense-amount' %>">
+            <%= transaction.transaction_type == 'income' ? '+' : '-' %>$<%= number_with_precision(transaction.amount, precision: 2) %>
+          </td>
+          <td><%= transaction.transaction_type.capitalize %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="5" style="text-align: center;">No transactions found for the selected criteria</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="footer">
+  <p>Generated via ExpenseTrack on <%= Date.today.strftime("%B %d, %Y at %I:%M %p") %></p>
+  <p>© <%= Date.today.year %> ExpenseTrack. All rights reserved.</p>
+</div> 

@@ -10,11 +10,16 @@ Rails.application.routes.draw do
   authenticated :user do
     get "/dashboard", to: "dashboard#index", as: :dashboard
     resources :transactions
+    get "/reports", to: "reports#index", as: :reports
+    get "/reports/export_pdf", to: "reports#export_pdf", as: :export_pdf
+    get "/reports/download_pdf", to: "reports#download_pdf", as: :download_pdf
+    get "/reports/export_csv", to: "reports#export_csv", as: :export_csv
   end
   
   # Redirect to login if trying to access protected pages
   get "/dashboard", to: redirect("/users/sign_in")
   get "/transactions", to: redirect("/users/sign_in")
+  get "/reports", to: redirect("/users/sign_in")
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

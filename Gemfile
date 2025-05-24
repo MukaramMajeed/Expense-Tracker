@@ -61,3 +61,9 @@ gem "tailwindcss-ruby", "~> 4.1"
 gem "tailwindcss-rails", "~> 4.2"
 
 gem 'devise'
+
+# Add groupdate gem for time-series data grouping in reports
+gem 'groupdate'
+
+# Add csv for data export
+gem 'csv'

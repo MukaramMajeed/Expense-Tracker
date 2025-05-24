@@ -1,0 +1,60 @@
+/* Print styles for reports */
+@media print {
+  body {
+    background-color: white;
+    color: black;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  header, footer, .bg-gray-800, .bg-gray-900 {
+    background-color: white !important;
+    color: black !important;
+    border: none !important;
+  }
+  
+  h1, h2, h3, h4, h5, h6, p, table, th, td {
+    color: black !important;
+  }
+  
+  .no-print, button, .py-8, section.py-6 {
+    display: none !important;
+  }
+  
+  #report-header {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .page-break {
+    page-break-before: always;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .text-red-400, .text-green-400 {
+    font-weight: bold;
+  }
+  
+  .text-green-400 {
+    color: #0c6b58 !important;
+  }
+  
+  .text-red-400 {
+    color: #c53030 !important;
+  }
+} 

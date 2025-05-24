@@ -1,0 +1,376 @@
+<div class="bg-gray-900 text-white min-h-screen">
+  <!-- Print-only header (visible only when printing) -->
+  <div id="report-header" class="hidden print:block mb-8">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center">
+        <div class="text-teal-400 mr-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold">ExpenseTrack - Financial Report</h1>
+          <p class="text-sm">Generated on <%= Date.today.strftime("%B %d, %Y") %></p>
+        </div>
+      </div>
+      <div>
+        <p class="font-medium"><%= current_user.email.split('@').first.capitalize %></p>
+        <p class="text-sm"><%= current_user.email %></p>
+      </div>
+    </div>
+    <div class="border-t border-gray-300 pt-4">
+      <p><strong>Report Period:</strong> <%= @start_date.strftime("%b %d, %Y") %> - <%= @end_date.strftime("%b %d, %Y") %></p>
+      <% if @category.present? %>
+        <p><strong>Category:</strong> <%= @category.capitalize %></p>
+      <% end %>
+      <% if @transaction_type.present? %>
+        <p><strong>Type:</strong> <%= @transaction_type.capitalize %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Header Section -->
+  <section class="py-8 bg-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-start mb-8">
+        <div class="flex items-center mb-4 md:mb-0">
+          <div class="text-teal-400 mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold">Financial Report Summary</h1>
+        </div>
+        
+        <!-- User Profile Card -->
+        <div class="bg-gray-700 rounded-lg p-4 w-full md:w-auto">
+          <div class="flex items-start">
+            <div class="w-12 h-12 rounded-full bg-teal-500 flex items-center justify-center text-white font-medium mr-4">
+              <%= current_user.email[0..1].upcase %>
+            </div>
+            <div>
+              <h3 class="font-medium text-white"><%= current_user.email.split('@').first.capitalize %></h3>
+              <p class="text-sm text-gray-300"><%= current_user.email %></p>
+              <p class="text-xs text-gray-400">Account created: <%= current_user.created_at.strftime("%b %d, %Y") %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Report Filters Section -->
+  <section class="py-6 bg-gray-800 border-t border-b border-gray-700">
+    <div class="container mx-auto px-4">
+      <%= form_with(url: reports_path, method: :get, local: true, class: "space-y-4") do |form| %>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div class="col-span-1">
+            <%= form.label :start_date, "Start Date", class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= form.date_field :start_date, value: @start_date, class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" %>
+          </div>
+          
+          <div class="col-span-1">
+            <%= form.label :end_date, "End Date", class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= form.date_field :end_date, value: @end_date, class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" %>
+          </div>
+          
+          <div class="col-span-1">
+            <%= form.label :report_type, "Report Type", class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= form.select :report_type, [["Monthly", "monthly"], ["Quarterly", "quarterly"], ["Yearly", "yearly"]], { selected: @report_type }, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
+          </div>
+          
+          <div class="col-span-1">
+            <%= form.label :category, "Category", class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= form.select :category, [
+              ["All Categories", ""],
+              ["Hostel", "hostel"],
+              ["Khana Peena", "khana peena"],
+              ["Transportation", "transport"],
+              ["Entertainment", "movie"],
+              ["Electricity", "electricity"],
+              ["Income", "income"],
+              ["Other", "other"]
+            ], { selected: @category }, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
+          </div>
+          
+          <div class="col-span-1">
+            <%= form.label :transaction_type, "Type", class: "block text-sm font-medium text-gray-300 mb-1" %>
+            <%= form.select :transaction_type, [["All Types", ""], ["Income", "income"], ["Expense", "expense"]], { selected: @transaction_type }, { class: "bg-gray-700 text-white rounded px-3 py-2 w-full text-sm border border-gray-600 focus:outline-none focus:border-teal-500" } %>
+          </div>
+        </div>
+        
+        <div class="flex justify-end">
+          <%= form.submit "Generate Report", class: "bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 rounded-md font-medium" %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Report Display Section -->
+  <section class="py-8">
+    <div class="container mx-auto px-4">
+      <!-- Financial Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Total Income Card -->
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-green-500">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-500 bg-opacity-10">
+              <svg class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-400">Total Income</p>
+              <p class="text-2xl font-bold text-white">$<%= number_with_precision(@total_income, precision: 2, delimiter: ',') || '0.00' %></p>
+              <p class="text-xs text-green-400 flex items-center mt-1">
+                <span><%= @start_date.strftime("%b %d") %> - <%= @end_date.strftime("%b %d, %Y") %></span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Expenses Card -->
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-red-500">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-red-500 bg-opacity-10">
+              <svg class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-400">Total Expenses</p>
+              <p class="text-2xl font-bold text-white">$<%= number_with_precision(@total_expenses, precision: 2, delimiter: ',') || '0.00' %></p>
+              <p class="text-xs text-red-400 flex items-center mt-1">
+                <span><%= @start_date.strftime("%b %d") %> - <%= @end_date.strftime("%b %d, %Y") %></span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Net Savings Card -->
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-500 bg-opacity-10">
+              <svg class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-400">Net Savings</p>
+              <p class="text-2xl font-bold text-white">$<%= number_with_precision(@net_savings, precision: 2, delimiter: ',') || '0.00' %></p>
+              <p class="text-xs text-blue-400 flex items-center mt-1">
+                <% if @net_savings > 0 %>
+                  <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Positive Savings</span>
+                <% elsif @net_savings < 0 %>
+                  <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Negative Balance</span>
+                <% else %>
+                  <span>Break Even</span>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 gap-6 mb-8">
+        <!-- Pie Chart: Category Distribution - Now Full Width -->
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+          <h3 class="text-lg font-medium mb-4">Spending by Category</h3>
+          <% 
+            # Define category colors at the template level so they're accessible throughout
+            category_colors = {
+              'hostel' => 'bg-emerald-500',
+              'khana peena' => 'bg-blue-500',
+              'transport' => 'bg-indigo-500',
+              'movie' => 'bg-amber-500',
+              'electricity' => 'bg-purple-500',
+              'income' => 'bg-green-500',
+              'other' => 'bg-red-500'
+            }
+          %>
+          <% if @category_breakdown.present? %>
+            <div class="relative" style="height: 300px;">
+              <!-- Category breakdown visualization -->
+              <div class="flex flex-col md:flex-row">
+                <!-- Category list on the left side -->
+                <div class="md:w-1/2">
+                  <% @category_breakdown.each do |category, amount| %>
+                    <% 
+                      color = category_colors[category] || 'bg-gray-500'
+                      percentage = (@category_breakdown.values.sum > 0) ? ((amount / @category_breakdown.values.sum) * 100).round : 0
+                    %>
+                    <div class="flex items-center mb-4">
+                      <div class="w-4 h-4 rounded-full <%= color %> mr-3"></div>
+                      <span class="text-sm font-medium"><%= category.capitalize %></span>
+                      <div class="flex-grow mx-4">
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                          <div class="<%= color.sub('bg-', 'bg-') %> h-2 rounded-full" style="width: <%= percentage %>%"></div>
+                        </div>
+                      </div>
+                      <span class="text-sm"><%= percentage %>%</span>
+                      <span class="text-sm text-gray-400 ml-2">($<%= number_with_precision(amount, precision: 2) %>)</span>
+                    </div>
+                  <% end %>
+                </div>
+                
+                <!-- Summary on the right side -->
+                <div class="md:w-1/2 mt-6 md:mt-0 md:pl-8">
+                  <div class="bg-gray-700 rounded-lg p-4">
+                    <h4 class="text-md font-medium mb-3">Summary</h4>
+                    <div class="space-y-2">
+                      <div class="flex justify-between">
+                        <span class="text-sm text-gray-300">Total Spending:</span>
+                        <span class="text-sm font-medium">$<%= number_with_precision(@total_expenses, precision: 2, delimiter: ',') %></span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-sm text-gray-300">Largest Category:</span>
+                        <% 
+                          largest = @category_breakdown.max_by { |_, amount| amount }
+                          if largest
+                            largest_category = largest[0]
+                            largest_amount = largest[1]
+                          end
+                        %>
+                        <% if largest %>
+                          <span class="text-sm font-medium"><%= largest_category.capitalize %> ($<%= number_with_precision(largest_amount, precision: 2) %>)</span>
+                        <% else %>
+                          <span class="text-sm font-medium">None</span>
+                        <% end %>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-sm text-gray-300">Categories:</span>
+                        <span class="text-sm font-medium"><%= @category_breakdown.size %></span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-sm text-gray-300">Date Range:</span>
+                        <span class="text-sm font-medium"><%= @start_date.strftime("%b %d") %> - <%= @end_date.strftime("%b %d, %Y") %></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <div class="flex items-center justify-center h-64 text-gray-400">
+              No data available for the selected period
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Transaction Table -->
+      <div class="bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+        <h3 class="text-lg font-medium mb-4">Transaction Details</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-700">
+            <thead>
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Category</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Description</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Type</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-700">
+              <% if @transactions.present? %>
+                <% @transactions.each do |transaction| %>
+                  <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= transaction.date.strftime("%b %d, %Y") %></td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <% 
+                        category_bg_color = case transaction.category
+                        when "hostel" then "bg-emerald-100 text-emerald-800"
+                        when "khana peena" then "bg-blue-100 text-blue-800"
+                        when "transport" then "bg-indigo-100 text-indigo-800"
+                        when "movie" then "bg-amber-100 text-amber-800"
+                        when "electricity" then "bg-purple-100 text-purple-800"
+                        when "income" then "bg-green-100 text-green-800"
+                        else "bg-gray-100 text-gray-800"
+                        end
+                      %>
+                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= category_bg_color %>">
+                        <%= transaction.category.capitalize %>
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-300"><%= transaction.description %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium <%= transaction.transaction_type == 'income' ? 'text-green-400' : 'text-red-400' %>">
+                      <%= transaction.transaction_type == 'income' ? '+' : '-' %>$<%= number_with_precision(transaction.amount, precision: 2) %>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= transaction.transaction_type.capitalize %></td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr>
+                  <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-400">No transactions found for the selected criteria</td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Export Options -->
+      <div class="flex flex-wrap justify-end gap-4">
+        <%= link_to export_pdf_path(
+              start_date: @start_date, 
+              end_date: @end_date, 
+              category: @category, 
+              transaction_type: @transaction_type, 
+              report_type: @report_type
+            ), 
+            target: "_blank",
+            class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium flex items-center" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          View Report
+        <% end %>
+        
+        <%= link_to download_pdf_path(
+              start_date: @start_date, 
+              end_date: @end_date, 
+              category: @category, 
+              transaction_type: @transaction_type, 
+              report_type: @report_type
+            ), 
+            target: "_blank",
+            class: "bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium flex items-center" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+          </svg>
+          Download PDF
+        <% end %>
+        
+        <%= link_to export_csv_path(
+              format: :csv,
+              start_date: @start_date, 
+              end_date: @end_date, 
+              category: @category, 
+              transaction_type: @transaction_type
+            ), 
+            class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium flex items-center" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Export as CSV
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Print-only footer -->
+  <div class="hidden print:block mt-8 pt-4 border-t border-gray-300 text-center text-sm">
+    <p>Generated via ExpenseTrack on <%= Date.today.strftime("%B %d, %Y at %I:%M %p") %></p>
+    <p>© <%= Date.today.year %> ExpenseTrack. All rights reserved.</p>
+  </div>
+</div> 

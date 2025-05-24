@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ExpenseTrack - Financial Report</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eaeaea;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    .logo svg {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 0 0 5px 0;
+    }
+    h2 {
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+    .date {
+      font-size: 14px;
+      color: #666;
+    }
+    .user-info {
+      text-align: right;
+    }
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .summary-card {
+      padding: 15px;
+      border-radius: 5px;
+      width: 30%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .income {
+      border-left: 4px solid #38a169;
+    }
+    .expenses {
+      border-left: 4px solid #e53e3e;
+    }
+    .savings {
+      border-left: 4px solid #3182ce;
+    }
+    .card-title {
+      font-size: 12px;
+      color: #666;
+      margin: 0 0 5px 0;
+    }
+    .card-value {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th {
+      background-color: #f9fafb;
+      text-align: left;
+      padding: 10px;
+      font-size: 12px;
+      border-bottom: 2px solid #eaeaea;
+    }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eaeaea;
+      font-size: 14px;
+    }
+    .category {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .income-amount {
+      color: #38a169;
+      font-weight: bold;
+    }
+    .expense-amount {
+      color: #e53e3e;
+      font-weight: bold;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eaeaea;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    /* Print instructions styles */
+    .print-instructions {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .print-instructions p {
+      margin: 0;
+    }
+    .print-button {
+      background-color: #3182ce;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    @media print {
+      .print-instructions {
+        display: none;
+      }
+    }
+  </style>
+  
+  <% if @auto_print %>
+  <script>
+    window.onload = function() {
+      // Add a slight delay to ensure page is fully loaded
+      setTimeout(function() {
+        window.print();
+      }, 500);
+    }
+  </script>
+  <% end %>
+</head>
+<body>
+  <div class="container">
+    <% if @auto_print %>
+    <div class="print-instructions">
+      <p>Your PDF report is ready. The print dialog should open automatically. If it doesn't, click the button.</p>
+      <button class="print-button" onclick="window.print()">Print Report</button>
+    </div>
+    <% end %>
+    <%= yield %>
+  </div>
+</body>
+</html> 
